@@ -1,9 +1,10 @@
 <?php
 
 
-class Article{
+class Article
+{
     // private $id;
-    private $textes ;
+    private $textes;
     private $id_utilisateurs;
     const HOST = "localhost";
     const DBNAME = "blogville";
@@ -40,17 +41,15 @@ class Article{
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $pdo;
     }
+    // methode pour ecrire un article
+    public function requete()
+    {
 
-    public function requete(){
-      
         $inser = $this->connecter()->prepare("INSERT INTO articles (textes,id_utilisateurs)
         VALUES(?,?) ");
-        
-        $inser->bindValue(1, $this-> textes, PDO::PARAM_STR);
-        $inser->bindValue(2, $this-> id_utilisateurs, PDO::PARAM_INT);
+
+        $inser->bindValue(1, $this->textes, PDO::PARAM_STR);
+        $inser->bindValue(2, $this->id_utilisateurs, PDO::PARAM_INT);
         $inser->execute();
     }
-
-
 }
-?>

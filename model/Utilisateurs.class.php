@@ -83,7 +83,7 @@ class Utilisateurs
     }
 
 
-
+// se connecter a la base de données
     private function connecter()
     {
 
@@ -91,11 +91,9 @@ class Utilisateurs
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $pdo;
     }
-
+// selectionner la base de données
     public function select()
     {
-
-
         $infosUsers = $this->connecter()->prepare("SELECT `utilisateurs`.`id`, `email`, `name`, `MotDepasse`, `pseudo`, `id_Roles`, `avatar` 
     FROM `utilisateurs` 
     INNER JOIN `cities` 
@@ -107,6 +105,7 @@ class Utilisateurs
 
         return $infosUsers->fetch(PDO::FETCH_ASSOC);
     }
+    // methode pour se connecter via l'email
     public function requete()
     {
         $infosUser = $this->connecter()->prepare("SELECT `id`, `email`, `MotDepasse`, `pseudo`, `id_citie`, `id_Roles` FROM `utilisateurs` WHERE email = ?");
@@ -116,7 +115,7 @@ class Utilisateurs
         $infosUser->execute();
         return $infosUser->fetch(PDO::FETCH_ASSOC);
     }
-
+// methode pour  la ville
     public function ville()
     {
         $villeUser = $this->connecter()->prepare("SELECT `id` FROM `cities` WHERE `name` =?");
@@ -124,6 +123,7 @@ class Utilisateurs
         $villeUser->execute();
         return $villeUser->fetch(PDO::FETCH_ASSOC);
     }
+    // methode verif email
     public function mail()
     {
         $mailVerif = $this->connecter()->prepare("SELECT id,`email`, `pseudo` FROM `utilisateurs` WHERE email=?");
@@ -131,6 +131,7 @@ class Utilisateurs
         $mailVerif->execute();
         return $mailVerif->fetch(PDO::FETCH_ASSOC);
     }
+    // methode verif pseudo
     public function pseudo()
     {
         $pseudoVerif = $this->connecter()->prepare("SELECT id,`email`, `pseudo` FROM `utilisateurs` WHERE pseudo=?");
@@ -138,6 +139,7 @@ class Utilisateurs
         $pseudoVerif->execute();
         return $pseudoVerif->fetch(PDO::FETCH_ASSOC);
     }
+    // methode pour creer un compte
     public function register()
     {
         $register = $this->connecter()->prepare("UPDATE `utilisateurs` SET `email` = ?, `MotDepasse` = ?, `pseudo` = ?, `id_citie` = ?, `avatar`= ? WHERE id = ?");
@@ -149,19 +151,21 @@ class Utilisateurs
         $register->bindValue(6, $this->id, PDO::PARAM_INT);
         return   $register->execute();
     }
+    // methode pour supprimer un compte
     public function delete()
     {
         $delete = $this->connecter()->prepare("DELETE FROM utilisateurs WHERE id = ?");
         $delete->bindValue(1, $this->id, PDO::PARAM_STR);
         $delete->execute();
     }
+    // methode pour selectionner une ville
     public function choixVille()
     {
         $id = $this->connecter()->query("SELECT id,name  FROM `cities` where id = 1456 or id = 2889 
       or id = 3784 or id = 4547 or id = 5654");
         return $id->fetchAll(PDO::FETCH_ASSOC);
     }
-
+// methode verif email pseudo
     public function verif()
     {
         $nbuser = $this->connecter()->prepare("SELECT email,pseudo FROM utilisateurs  WHERE email = ? OR pseudo = ?");
@@ -171,6 +175,7 @@ class Utilisateurs
         $nbuser->execute();
         return $nbuser->fetch(PDO::FETCH_ASSOC);
     }
+    // methode pour inserer
     public function insert()
     {
         $insertion = $this->connecter()->prepare("INSERT INTO utilisateurs(email,MotDepasse,pseudo,id_citie)
